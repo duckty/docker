@@ -1,7 +1,16 @@
 sudo: required
-
+env:
+  - docker_repo=duckty/mongo
 services:
   - docker
-script:
-	- docker pull  ubuntu:14.04
-	- docker build -t carlad/sinatra
+
+before_script: 
+  - docker pull ubuntu:14.04
+
+script:	
+	- docker build -t ${docker_repo}:${TRAVIS_BUILD_NUMBER} .
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push ${docker_repo}:${TRAVIS_BUILD_NUMBER}
+branches:
+  only:
+    - master
