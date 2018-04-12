@@ -9,7 +9,7 @@ before_script:
 
 script:	
   - docker build -t ${docker_repo}:${TRAVIS_BUILD_NUMBER} .
-  - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+  - echo -n $DOCKER_PASSWORD | base64 -d | docker login -u $DOCKER_USERNAME --password-stdin
   - docker push ${docker_repo}:${TRAVIS_BUILD_NUMBER}
 branches:
   only:
